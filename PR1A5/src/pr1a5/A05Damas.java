@@ -203,7 +203,10 @@ public class A05Damas {
         if(alvo.tipo != ' ')//Se a casa-alvo não estiver vazia, jogada inválida
             return 0;
         
-        if(peca.tipo == 'w' && peca.linha - alvo.linha == 1){//Verifica se a peça branca se locomoveu apenas uma linha
+        if(peca.linha - alvo.linha == 0 || peca.coluna - alvo.coluna == 0)
+            return 0;
+        
+        if(peca.tipo == 'w' && peca.linha - alvo.linha == 1){//Verifica se a peça branca se locomoveu apenas uma linha em direção ao campo adversário
             if(peca.coluna - alvo.coluna != 1 && peca.coluna - alvo.coluna != -1) //Se a peça se locomoveu apenas uma linha e mais de uma coluna, jogada inválida
                 return 0;            
             else
@@ -224,6 +227,22 @@ public class A05Damas {
                         return 0;
                 }
             }
+        }else if(peca.tipo == 'w' && peca.linha - alvo.linha == -2){//Verifica se a peça branca se locomoveu duas linhas em direção ao próprio campo.
+            if(peca.coluna - alvo.coluna != 2 && peca.coluna - alvo.coluna != -2)//Se a peça se locomoveu duas linhas e mais de duas colunas, jogada inválida
+                return 0;
+            else{
+                if(peca.coluna - alvo.coluna == 2){
+                    if(tabuleiro[peca.linha + 1][peca.coluna - 1] == 'b' || tabuleiro[peca.linha + 1][peca.coluna - 1] == 'B')
+                        return 2;
+                    else
+                        return 0;
+                }else{
+                    if(tabuleiro[peca.linha + 1][peca.coluna + 1] == 'b' || tabuleiro[peca.linha + 1][peca.coluna + 1] == 'b')
+                        return 2;
+                    else
+                        return 0;
+                }                    
+            }           
         }else if(peca.tipo == 'b' && alvo.linha - peca.linha == 1){//Verifica se a peça preta se locomoveu apenas uma linha
             if(peca.coluna - alvo.coluna != 1 && peca.coluna - alvo.coluna != -1) //Se a peça se locomoveu apenas uma linha e mais de uma coluna, jogada inválida
                 return 0;            
@@ -245,6 +264,22 @@ public class A05Damas {
                         return 0;
                 }
             }
+        }else if(peca.tipo == 'b' && alvo.linha - peca.linha == -2){//Verifica se a peça branca se locomoveu duas linhas em direção ao próprio campo.
+            if(peca.coluna - alvo.coluna != 2 && peca.coluna - alvo.coluna != -2)//Se a peça se locomoveu duas linhas e mais de duas colunas, jogada inválida
+                return 0;
+            else{
+                if(peca.coluna - alvo.coluna == 2){
+                    if(tabuleiro[peca.linha - 1][peca.coluna - 1] == 'w' || tabuleiro[peca.linha + 1][peca.coluna - 1] == 'W')
+                        return 2;
+                    else
+                        return 0;
+                }else{
+                    if(tabuleiro[peca.linha - 1][peca.coluna + 1] == 'w' || tabuleiro[peca.linha + 1][peca.coluna + 1] == 'W')
+                        return 2;
+                    else
+                        return 0;
+                }                    
+            }           
         }else if(peca.tipo == 'W' || peca.tipo == 'B'){//Se a peça for uma dama, simplesmente checa se manteve a diagonalidade e se as peças que passou por cima são válidas
             if((peca.coluna - alvo.coluna) == (peca.linha - alvo.linha) || (peca.coluna - alvo.coluna) == ((peca.linha - alvo.linha) * -1)){
                 int aux = ChecaCaminho(tabuleiro, peca, alvo);
@@ -256,10 +291,8 @@ public class A05Damas {
                     return 0;
             }else
                 return 0;
-        }
-        
-        
-        return -1;    
+        }        
+        return 0;    
     }
 
     public static void main(String[] args) {
